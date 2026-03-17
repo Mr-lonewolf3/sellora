@@ -1,0 +1,26 @@
+# Prevent directory listing
+Options -Indexes
+
+RewriteEngine On
+
+# Redirect root to index.php
+RewriteRule ^$ index.php [L]
+
+# Block direct access to sensitive file types (Apache 2.4 style)
+<FilesMatch "\.(sql|env|log|sh)$">
+    Require all denied
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options SAMEORIGIN
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# PHP settings (Optional, Docker usually handles this in php.ini)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+</IfModule>

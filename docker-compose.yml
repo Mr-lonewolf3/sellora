@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+  php-apache:
+    build: .
+    container_name: sellora_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    networks:
+      - sellora_net
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: sellora_db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: sellora_root
+      MYSQL_DATABASE: sellora_db
+      MYSQL_USER: sellora_user
+      MYSQL_PASSWORD: sellora_pass
+    volumes:
+      - sellora_mysql_data:/var/lib/mysql
+      - ./database/sellora.sql:/docker-entrypoint-initdb.d/sellora.sql
+    networks:
+      - sellora_net
+    restart: unless-stopped
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sellora_phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: sellora_root
+    depends_on:
+      - mysql
+    networks:
+      - sellora_net
+    restart: unless-stopped
+
+volumes:
+  sellora_mysql_data:
+
+networks:
+  sellora_net:
+    driver: bridge
