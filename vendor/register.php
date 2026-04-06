@@ -102,7 +102,7 @@ require_once __DIR__ . '/../config/helpers.php';
 
         <div class="form-group form-check">
           <label>
-            <input type="checkbox" required> I agree to Sellora's <a href="#">Vendor Terms</a> and <a href="#">Policies</a>
+            <input type="checkbox" required> I agree to Sellora's <a href="vendor-terms.php">Vendor Terms</a> and <a href="vendor-privacy.php">Policies</a>
           </label>
         </div>
 

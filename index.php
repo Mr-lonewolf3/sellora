@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../config/config.php';
+require_once(__DIR__ . '/config/config.php');
 $conn = getDBConnection();
 $categories = getCategories($conn);
 ?>
@@ -10,13 +10,14 @@ $categories = getCategories($conn);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sellora - Kenya's Premier Online Marketplace</title>
   <link rel="stylesheet" href="client/css/landing.css">
+  <link rel="stylesheet" href="client/css/landing-v2.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <!-- ============================================================
-     NAVIGATION
+     NAVIGATION (same as original)
      ============================================================ -->
 <nav class="land-nav">
   <div class="container">
@@ -46,211 +47,442 @@ $categories = getCategories($conn);
 </nav>
 
 <!-- ============================================================
-     HERO SECTION
+     HERO BANNER (QuickStore-style full-width slider look)
      ============================================================ -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-shape hero-shape-1"></div>
-    <div class="hero-shape hero-shape-2"></div>
-    <div class="hero-shape hero-shape-3"></div>
-  </div>
-  <div class="container">
-    <div class="hero-content">
-      <div class="hero-text">
-        <div class="hero-badge">
-          <i class="fas fa-bolt"></i> Kenya's #1 Marketplace
-        </div>
-        <h1>Shop Smart.<br><span>Sell More.</span><br>Grow Together.</h1>
-        <p>Discover thousands of products from verified vendors across Kenya. From electronics to fashion, everything you need is just a click away.</p>
-        <div class="hero-actions">
-          <a href="client/home.php" class="btn-hero-primary">
-            <i class="fas fa-shopping-bag"></i> Start Shopping
-          </a>
-          <a href="vendor/register.php" class="btn-hero-secondary">
-            <i class="fas fa-store"></i> Become a Vendor
-          </a>
-        </div>
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <strong>50K+</strong>
-            <span>Products</span>
-          </div>
-          <div class="hero-stat-divider"></div>
-          <div class="hero-stat">
-            <strong>2K+</strong>
-            <span>Vendors</span>
-          </div>
-          <div class="hero-stat-divider"></div>
-          <div class="hero-stat">
-            <strong>100K+</strong>
-            <span>Customers</span>
-          </div>
-        </div>
+<section class="qs-hero">
+  <div class="qs-hero-inner">
+    <div class="qs-hero-text">
+      <p class="qs-hero-sub">Kenya's #1 Marketplace — <span>50,000+ Products</span></p>
+      <h1>Shop Smart.<br><em>Sell More.</em><br>Grow Together.</h1>
+      <p class="qs-hero-desc">Discover thousands of products from verified vendors across Kenya. Electronics, fashion, beauty, and more — delivered to your door.</p>
+      <div class="qs-hero-price">
+        <span>From</span> <strong>KSh 199</strong>
+        <small>or enjoy M-Pesa easy payment</small>
       </div>
-      <div class="hero-visual">
-        <div class="hero-phone">
-          <div class="phone-screen">
-            <div class="phone-header">
-              <span class="phone-logo">Sell<span>ora</span></span>
-              <i class="fas fa-shopping-cart"></i>
-            </div>
-            <div class="phone-banner">
-              <div class="phone-banner-text">
-                <small>Flash Sale</small>
-                <strong>Up to 60% OFF</strong>
-              </div>
-              <i class="fas fa-tag phone-banner-icon"></i>
-            </div>
-            <div class="phone-products">
-              <div class="phone-product">
-                <div class="phone-product-img"><i class="fas fa-laptop"></i></div>
-                <div class="phone-product-info">
-                  <span>Laptop Pro</span>
-                  <strong>KSh 45,000</strong>
-                </div>
-              </div>
-              <div class="phone-product">
-                <div class="phone-product-img fashion"><i class="fas fa-tshirt"></i></div>
-                <div class="phone-product-info">
-                  <span>Casual Wear</span>
-                  <strong>KSh 1,200</strong>
-                </div>
-              </div>
-              <div class="phone-product">
-                <div class="phone-product-img beauty"><i class="fas fa-spa"></i></div>
-                <div class="phone-product-info">
-                  <span>Skincare Kit</span>
-                  <strong>KSh 2,500</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="floating-card card-1">
-          <i class="fas fa-shield-alt"></i>
-          <span>Secure Payments</span>
-        </div>
-        <div class="floating-card card-2">
-          <i class="fas fa-truck"></i>
-          <span>Fast Delivery</span>
-        </div>
-        <div class="floating-card card-3">
-          <i class="fas fa-star"></i>
-          <span>Top Rated</span>
-        </div>
+      <div class="qs-hero-btns">
+        <a href="client/home.php" class="qs-btn-primary"><i class="fas fa-shopping-bag"></i> Start Shopping</a>
+        <a href="vendor/register.php" class="qs-btn-ghost"><i class="fas fa-store"></i> Become a Vendor</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     TRUST BADGES
-     ============================================================ -->
-<section class="trust-bar">
-  <div class="container">
-    <div class="trust-grid">
-      <div class="trust-item">
-        <i class="fas fa-shield-alt"></i>
-        <div>
-          <strong>100% Secure</strong>
-          <span>Encrypted transactions</span>
+    <div class="qs-hero-image">
+      <a href="client/home.php?category=electronics" class="qs-hero-img-link">
+        <img id="dynamic-hero-img" 
+            src="client/images/hero-phone.png" 
+            alt="Featured Product" />
+        
+        <div class="qs-hero-img-placeholder">
+          <i class="fas fa-mobile-alt"></i>
+          <span>Featured Products</span>
         </div>
-      </div>
-      <div class="trust-item">
-        <i class="fas fa-truck-fast"></i>
-        <div>
-          <strong>Fast Delivery</strong>
-          <span>Across Kenya</span>
-        </div>
-      </div>
-      <div class="trust-item">
-        <i class="fas fa-rotate-left"></i>
-        <div>
-          <strong>Easy Returns</strong>
-          <span>30-day return policy</span>
-        </div>
-      </div>
-      <div class="trust-item">
-        <i class="fas fa-headset"></i>
-        <div>
-          <strong>24/7 Support</strong>
-          <span>Always here to help</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============================================================
-     CATEGORIES
-     ============================================================ -->
-<section class="land-section" id="categories">
-  <div class="container">
-    <div class="land-section-header">
-      <h2>Shop by Category</h2>
-      <p>Find exactly what you're looking for across our wide range of product categories</p>
-    </div>
-    <div class="land-categories-grid">
-      <?php foreach ($categories as $cat): ?>
-      <a href="client/home.php?category=<?= $cat['slug'] ?>" class="land-cat-card">
-        <div class="land-cat-icon">
-          <i class="<?= $cat['icon'] ?>"></i>
-        </div>
-        <span><?= htmlspecialchars($cat['name']) ?></span>
       </a>
-      <?php endforeach; ?>
+    </div>
+    <div class="qs-hero-dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
     </div>
   </div>
 </section>
 
 <!-- ============================================================
-     FEATURES
+     TRUST BADGES BAR
      ============================================================ -->
-<section class="land-section features-section" id="features">
-  <div class="container">
-    <div class="land-section-header">
+<section class="qs-trust-bar">
+  <div class="qs-container">
+    <div class="qs-trust-grid">
+      <div class="qs-trust-item">
+        <i class="fas fa-shield-alt"></i>
+        <div><strong>100% Secure</strong><span>Encrypted transactions</span></div>
+      </div>
+      <div class="qs-trust-item">
+        <i class="fas fa-truck-fast"></i>
+        <div><strong>Fast Delivery</strong><span>Across County</span></div>
+      </div>
+      <div class="qs-trust-item">
+        <i class="fas fa-rotate-left"></i>
+        <div><strong>Easy Returns</strong><span>10-day return policy</span></div>
+      </div>
+      <div class="qs-trust-item">
+        <i class="fas fa-headset"></i>
+        <div><strong>24/7 Support</strong><span>Always here to help</span></div>
+      </div>
+      <div class="qs-trust-item">
+        <i class="fas fa-tags"></i>
+        <div><strong>Best Prices</strong><span>Guaranteed deals</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TOP CATEGORIES (QuickStore-style icon row)
+     ============================================================ -->
+<section class="qs-section" id="categories">
+  <div class="qs-container">
+    <div class="qs-section-header">
+      <h2>Our Top Categories</h2>
+      <a href="client/home.php" class="qs-view-all">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="qs-categories-row">
+      <?php if (!empty($categories)): ?>
+        <?php foreach ($categories as $cat): ?>
+        <a href="client/home.php?category=<?= $cat['slug'] ?>" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap">
+            <i class="<?= $cat['icon'] ?>"></i>
+          </div>
+          <span><?= htmlspecialchars($cat['name']) ?></span>
+          <small><?= rand(2, 20) ?> items</small>
+        </a>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <!-- Fallback static categories if DB has no data yet -->
+        <a href="client/home.php?category=electronics" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-tv"></i></div>
+          <span>Electronics</span><small>9 items</small>
+        </a>
+        <a href="client/home.php?category=speaker" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-volume-up"></i></div>
+          <span>Speaker</span><small>3 items</small>
+        </a>
+        <a href="client/home.php?category=tablets" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-tablet-alt"></i></div>
+          <span>Tablets</span><small>4 items</small>
+        </a>
+        <a href="client/home.php?category=fashion" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-tshirt"></i></div>
+          <span>Fashion</span><small>12 items</small>
+        </a>
+        <a href="client/home.php?category=beauty" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-spa"></i></div>
+          <span>Beauty</span><small>7 items</small>
+        </a>
+        <a href="client/home.php?category=phones" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-mobile-alt"></i></div>
+          <span>Phones</span><small>10 items</small>
+        </a>
+        <a href="client/home.php?category=headphones" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-headphones"></i></div>
+          <span>Headphones</span><small>2 items</small>
+        </a>
+        <a href="client/home.php?category=laptops" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-laptop"></i></div>
+          <span>Laptops</span><small>6 items</small>
+        </a>
+        <a href="client/home.php?category=accessories" class="qs-cat-pill">
+          <div class="qs-cat-icon-wrap"><i class="fas fa-plug"></i></div>
+          <span>Accessories</span><small>5 items</small>
+        </a>
+      <?php endif; ?>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PROMO BANNER GRID (3 featured products)
+     ============================================================ -->
+<section class="qs-promo-section">
+  <div class="qs-container">
+    <div class="qs-promo-grid">
+
+      <!-- Promo Card 1 -->
+      <a href="client/home.php?category=phones" class="qs-promo-card qs-promo-blue">
+        <div class="qs-promo-text">
+          <small>BIG SAVING</small>
+          <h3>Galaxy S17 Refurbished<br><em>Love The Price.</em></h3>
+          <p>From <strong>KSh 22,999</strong></p>
+          <span class="qs-promo-btn">Buy Now</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-phone.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="Galaxy S13 Lite" style="scale: 1.7;" />
+          <i class="fas fa-mobile-alt qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+      <!-- Promo Card 2 -->
+      <a href="client/home.php?category=smartwatch" class="qs-promo-card qs-promo-pink">
+        <div class="qs-promo-text">
+          <small>15% OFF</small>
+          <h3>Women's T-Shirt<br><em>Light On Price.</em></h3>
+          <p>From <strong>KSh 149</strong></p>
+          <span class="qs-promo-btn outline">Learn More</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-tshirt.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="Women's T-shirt" style="scale: 1.4;"  />
+          <i class="fas fa-clock qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+      <!-- Promo Card 3 -->
+      <a href="client/home.php?category=smarthome" class="qs-promo-card qs-promo-lavender">
+        <div class="qs-promo-text">
+          <small>Fruit Offer</small>
+          <h3>Pinapple<br><em>KSh 69 Each.</em></h3>
+          <p>From <strong>KSh 110</strong></p>
+          <span class="qs-promo-btn">Buy Now</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-fruit.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="Smart Speaker" style="scale: 1.6;" />
+          <i class="fas fa-home qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+      <!-- Promo Card 4 -->
+      <a href="client/home.php?category=airpods" class="qs-promo-card qs-promo-white">
+        <div class="qs-promo-text">
+          <small>BEST PRICE</small>
+          <h3>Sneakers<br><em>J4's</em></h3>
+          <p>From <strong>KSh 2499</strong></p>
+          <span class="qs-promo-btn ghost">Learn More</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-shoes.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="AirPods" style="scale: 1.8;" />
+          <i class="fas fa-headphones qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+      <!-- Promo Card 5 -->
+      <a href="client/home.php?category=headphones" class="qs-promo-card qs-promo-teal">
+        <div class="qs-promo-text">
+          <small>FLAT 25% OFF</small>
+          <h3>Apple Smartwatch 4th<br><em>Generation.</em></h3>
+          <p>From <strong>KSh 8,999</strong></p>
+          <span class="qs-promo-btn">Buy Now</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-watch.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="Apple Smartwatch" style="scale: 1.5;" />
+          <i class="fas fa-headphones-alt qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+      <!-- Promo Card 6 -->
+      <a href="client/home.php?category=laptops" class="qs-promo-card qs-promo-lilac">
+        <div class="qs-promo-text">
+          <small>NEWLY ADDED</small>
+          <h3>Mac Book Pro.<br><em>New Arrival.</em></h3>
+          <p>From <strong>KSh 149,900</strong></p>
+          <span class="qs-promo-btn ghost">Learn More</span>
+        </div>
+        <div class="qs-promo-img">
+          <img src="client/images/promo-macbook.jpg"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+               alt="MacBook Pro" />
+          <i class="fas fa-laptop qs-promo-fallback-icon" style="display:none;"></i>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     TRENDING PRODUCTS (tab-style section)
+     ============================================================ -->
+<section class="qs-section" id="trending">
+  <div class="qs-container">
+    <div class="qs-trending-header">
+      <h2>Our Trending Products</h2>
+      <div class="qs-tabs">
+        <button class="qs-tab active" onclick="switchTab(this,'new')">New Products</button>
+        <button class="qs-tab" onclick="switchTab(this,'bestselling')">Best Selling</button>
+        <button class="qs-tab" onclick="switchTab(this,'featured')">Featured</button>
+      </div>
+      <div class="qs-tab-arrows">
+        <button class="qs-arrow" onclick="scrollProducts(-1)"><i class="fas fa-chevron-left"></i></button>
+        <button class="qs-arrow" onclick="scrollProducts(1)"><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="qs-products-row" id="productsRow">
+      <!-- Product Card Template (replace with PHP loop from your products table) -->
+      <a href="client/product.php?id=1" class="qs-product-card">
+        <div class="qs-product-badge sale">-29%</div>
+        <div class="qs-product-img">
+          <img src="client/images/product-laptop.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Laptop" />
+          <div class="qs-product-img-ph"><i class="fas fa-laptop"></i></div>
+        </div>
+        <div class="qs-product-info">
+          <p class="qs-product-name">MacBook Air M2</p>
+          <div class="qs-product-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            sneakers<i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+          </div>
+          <div class="qs-product-price">
+            <strong>KSh 89,000</strong>
+            <del>KSh 124,000</del>
+          </div>
+        </div>
+      </a>
+      <a href="client/product.php?id=2" class="qs-product-card">
+        <div class="qs-product-badge hot">HOT</div>
+        <div class="qs-product-img">
+          <img src="client/images/product-phone.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Phone" />
+          <div class="qs-product-img-ph"><i class="fas fa-mobile-alt"></i></div>
+        </div>
+        <div class="qs-product-info">
+          <p class="qs-product-name">Samsung Galaxy S24</p>
+          <div class="qs-product-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <div class="qs-product-price">
+            <strong>KSh 58,000</strong>
+            <del>KSh 70,000</del>
+          </div>
+        </div>
+      </a>
+      <a href="client/product.php?id=3" class="qs-product-card">
+        <div class="qs-product-img">
+          <img src="client/images/product-watch.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Watch" />
+          <div class="qs-product-img-ph"><i class="fas fa-clock"></i></div>
+        </div>
+        <div class="qs-product-info">
+          <p class="qs-product-name">Apple Watch Series 9</p>
+          <div class="qs-product-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="far fa-star"></i>
+          </div>
+          <div class="qs-product-price">
+            <strong>KSh 42,000</strong>
+          </div>
+        </div>
+      </a>
+      <a href="client/product.php?id=4" class="qs-product-card">
+        <div class="qs-product-badge sale">-46%</div>
+        <div class="qs-product-img">
+          <img src="client/images/product-headphones.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Headphones" />
+          <div class="qs-product-img-ph"><i class="fas fa-headphones"></i></div>
+        </div>
+        <div class="qs-product-info">
+          <p class="qs-product-name">Sony WH-1000XM5</p>
+          <div class="qs-product-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <div class="qs-product-price">
+            <strong>KSh 28,000</strong>
+            <del>KSh 52,000</del>
+          </div>
+        </div>
+      </a>
+      <a href="client/product.php?id=5" class="qs-product-card">
+        <div class="qs-product-img">
+          <img src="client/images/product-camera.png"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+               alt="Camera" />
+          <div class="qs-product-img-ph"><i class="fas fa-camera"></i></div>
+        </div>
+        <div class="qs-product-info">
+          <p class="qs-product-name">Canon EOS R50</p>
+          <div class="qs-product-stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="far fa-star"></i>
+          </div>
+          <div class="qs-product-price">
+            <strong>KSh 75,000</strong>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="qs-view-all-wrap">
+      <a href="client/home.php" class="qs-btn-outline-red">View All Products <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STATS BAR
+     ============================================================ -->
+<section class="qs-stats-bar">
+  <div class="qs-container">
+    <div class="qs-stats-grid">
+      <div class="qs-stat">
+        <strong>50K+</strong>
+        <span>Products Listed</span>
+      </div>
+      <div class="qs-stat-divider"></div>
+      <div class="qs-stat">
+        <strong>2K+</strong>
+        <span>Verified Vendors</span>
+      </div>
+      <div class="qs-stat-divider"></div>
+      <div class="qs-stat">
+        <strong>100K+</strong>
+        <span>Happy Customers</span>
+      </div>
+      <div class="qs-stat-divider"></div>
+      <div class="qs-stat">
+        <strong>47</strong>
+        <span>Counties Served</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     WHY CHOOSE SELLORA (Features)
+     ============================================================ -->
+<section class="qs-section qs-features-bg" id="features">
+  <div class="qs-container">
+    <div class="qs-section-center-header">
       <h2>Why Choose Sellora?</h2>
       <p>Built for Kenyan buyers and sellers — a platform that understands your needs</p>
     </div>
-    <div class="features-grid">
+    <div class="qs-features-grid">
       <div class="feature-card">
-        <div class="feature-icon" style="background: #fff3e0;">
-          <i class="fas fa-store" style="color: #ff6d00;"></i>
+        <div class="feature-icon" style="background:#fff3e0;">
+          <i class="fas fa-store" style="color:#ff6d00;"></i>
         </div>
         <h3>Multi-Vendor Marketplace</h3>
         <p>Shop from hundreds of verified vendors all in one place. Compare prices and find the best deals.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background: #e8f5e9;">
-          <i class="fas fa-upload" style="color: #2e7d32;"></i>
+        <div class="feature-icon" style="background:#e8f5e9;">
+          <i class="fas fa-upload" style="color:#2e7d32;"></i>
         </div>
         <h3>Easy Product Upload</h3>
         <p>Vendors can upload products directly from their local drive with images, descriptions, and pricing.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background: #e3f2fd;">
-          <i class="fas fa-chart-line" style="color: #0277bd;"></i>
+        <div class="feature-icon" style="background:#e3f2fd;">
+          <i class="fas fa-chart-line" style="color:#0277bd;"></i>
         </div>
         <h3>Vendor Dashboard</h3>
         <p>Monitor your products, track sales, and manage your store with a powerful vendor dashboard.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background: #fce4ec;">
-          <i class="fas fa-search" style="color: #c62828;"></i>
+        <div class="feature-icon" style="background:#fce4ec;">
+          <i class="fas fa-search" style="color:#c62828;"></i>
         </div>
         <h3>Smart Search & Filter</h3>
         <p>Find products instantly with our intelligent search and category filtering system.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background: #f3e5f5;">
-          <i class="fas fa-shopping-cart" style="color: #6a1b9a;"></i>
+        <div class="feature-icon" style="background:#f3e5f5;">
+          <i class="fas fa-shopping-cart" style="color:#6a1b9a;"></i>
         </div>
         <h3>Seamless Shopping Cart</h3>
         <p>Add products to cart, manage quantities, and checkout with ease — even without an account.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background: #e0f7fa;">
-          <i class="fas fa-mobile-alt" style="color: #006064;"></i>
+        <div class="feature-icon" style="background:#e0f7fa;">
+          <i class="fas fa-mobile-alt" style="color:#006064;"></i>
         </div>
         <h3>Mobile Friendly</h3>
         <p>Shop on the go with our fully responsive design that works perfectly on any device.</p>
@@ -260,7 +492,7 @@ $categories = getCategories($conn);
 </section>
 
 <!-- ============================================================
-     CUSTOMER REGISTRATION CTA
+     CUSTOMER REGISTRATION CTA (Join Thousands of Happy Shoppers)
      ============================================================ -->
 <section class="cta-section" id="customer-cta">
   <div class="container">
@@ -286,7 +518,11 @@ $categories = getCategories($conn);
       </div>
       <div class="cta-visual">
         <div class="cta-illustration">
-          <i class="fas fa-shopping-bag"></i>
+          <img id="cta-sliding-img" 
+              src="client/images/happy-shopper1.png" 
+              alt="Sellora Shopper" 
+              style="width: 100%; height: auto; z-index: 5; position: relative; transition: all 0.5s ease; scale: 1.8;">
+          
           <div class="cta-circles">
             <div class="cta-circle c1"></div>
             <div class="cta-circle c2"></div>
@@ -299,7 +535,7 @@ $categories = getCategories($conn);
 </section>
 
 <!-- ============================================================
-     VENDOR REGISTRATION CTA
+     VENDOR REGISTRATION CTA (Start Selling on Sellora Today)
      ============================================================ -->
 <section class="cta-section" id="vendor-cta">
   <div class="container">
@@ -338,7 +574,7 @@ $categories = getCategories($conn);
 </section>
 
 <!-- ============================================================
-     FOOTER
+     FOOTER (same as original)
      ============================================================ -->
 <footer class="land-footer">
   <div class="container">
@@ -386,31 +622,87 @@ $categories = getCategories($conn);
 </footer>
 
 <script>
+// 1. Standalone Utility Functions
 function toggleMobileMenu() {
   const menu = document.getElementById('mobileMenu');
-  menu.classList.toggle('open');
+  if (menu) menu.classList.toggle('open');
 }
 
-// Smooth scroll for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
+function switchTab(btn, tab) {
+  document.querySelectorAll('.qs-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
 
-// Animate on scroll
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('animate-in');
+function scrollProducts(dir) {
+  const row = document.getElementById('productsRow');
+  if (row) row.scrollBy({ left: dir * 280, behavior: 'smooth' });
+}
+
+// 2. Main Logic (Runs after DOM is ready)
+document.addEventListener('DOMContentLoaded', function() {
+    /* --- HERO SLIDER --- */
+    const heroSection = document.querySelector('.qs-hero');
+    const heroImage = document.getElementById('dynamic-hero-img');
+    const heroDots = document.querySelectorAll('.qs-hero-dots .dot');
+
+    const slides = [
+        { image: 'client/images/hero-phone.png', bg: '#ec72e2' },
+        { image: 'client/images/hero-phone2.png', bg: '#c24646' },
+        { image: 'client/images/hero-electronic.png', bg: '#00c3ff' }
+    ];
+
+    let currentSlide = 0;
+
+    function updateSlide(index) {
+        if (!heroImage || !heroSection) return;
+        heroImage.style.opacity = '0';
+        heroImage.style.transform = 'translateX(20px)';
+
+        setTimeout(() => {
+            heroImage.src = slides[index].image;
+            heroSection.style.backgroundColor = slides[index].bg;
+            heroDots.forEach(dot => dot.classList.remove('active'));
+            if(heroDots[index]) heroDots[index].classList.add('active');
+            heroImage.style.opacity = '1';
+            heroImage.style.transform = 'translateX(0)';
+        }, 400); 
     }
-  });
-}, { threshold: 0.1 });
 
-document.querySelectorAll('.feature-card, .land-cat-card, .trust-item').forEach(el => {
-  observer.observe(el);
+    if (heroImage && slides.length > 0) {
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlide(currentSlide);
+        }, 5000);
+
+        heroDots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                currentSlide = idx;
+                updateSlide(currentSlide);
+            });
+        });
+    }
+
+    /* --- SMOOTH SCROLL --- */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    /* --- ANIMATE ON SCROLL (OBSERVER) --- */
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // This is the part that makes the categories visible
+    const animElements = document.querySelectorAll('.feature-card, .land-cat-card, .trust-item, .qs-cat-pill, .qs-promo-card, .qs-product-card');
+    animElements.forEach(el => observer.observe(el));
 });
 </script>
 </body>

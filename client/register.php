@@ -78,7 +78,7 @@ if (isLoggedIn()) redirect('home.php');
 
         <div class="form-group form-check">
           <label>
-            <input type="checkbox" required> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            <input type="checkbox" required> I agree to the <a href="client-terms.php">Terms of Service</a> and <a href="client-privacy.php">Privacy Policy</a>
           </label>
         </div>
 

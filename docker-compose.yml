@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   php-apache:
     build: .
@@ -9,7 +7,8 @@ services:
     volumes:
       - ./:/var/www/html
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html
     networks:
@@ -32,6 +31,12 @@ services:
     networks:
       - sellora_net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-psellora_root"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -43,7 +48,8 @@ services:
       PMA_USER: root
       PMA_PASSWORD: sellora_root
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     networks:
       - sellora_net
     restart: unless-stopped

@@ -23,9 +23,22 @@ Sellora is a full-featured, multi-vendor e-commerce platform built for a final y
 - **Database:** MySQL 8.0
 - **Environment:** Docker (XAMPP equivalent)
 
+## Setup (Using Github)
+
+**bash**
+- git clone https://github.com/yourusername/sellora.git
+- cd sellora
+- docker compose up --build 
+ 
+
+ or
+
+
 ## Setup Instructions (Using XAMPP)
 
-If you are using XAMPP on your local machine for your final year project presentation, follow these steps:
+If you are using XAMPP on your local machine for your final year 
+project presentation, follow these steps:
+
 
 1. **Extract the Files:**
    Extract the `sellora.zip` archive into your XAMPP `htdocs` directory (e.g., `C:\xampp\htdocs\sellora`).

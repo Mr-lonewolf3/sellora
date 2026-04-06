@@ -1,11 +1,14 @@
 <?php
 // config/helpers.php
 
-function getProductImage($filename, $name) {
+function getProductImage($image, $name) {
+    if (!empty($image)) {
+        $server_path = UPLOAD_DIR . $image;
 
-    if (!empty($filename) && file_exists(UPLOAD_DIR . $filename)) {
-        return UPLOAD_URL . $filename;
+        if (file_exists($server_path)) {
+            return UPLOAD_URL . $image;
+        }
     }
 
-    return BASE_URL . "client/images/placeholder.svg";
+    return 'https://via.placeholder.com/300x300?text=' . urlencode($name);
 }
