@@ -126,15 +126,15 @@ $featured = $featured_stmt->fetch_all(MYSQLI_ASSOC);
             <div class="home-banner-visual">
                 <div class="banner-cards">
                     <?php foreach (array_slice($featured, 0, 3) as $fp): ?>
-                    <div class="banner-product-card" onclick="window.location='product.php?id=<?= $fp['id'] ?>'">
-                        <img src="<?php echo UPLOAD_URL . $product['main_image']; ?>" 
-                            alt="<?php echo htmlspecialchars($product['name']); ?>" 
-                            class="product-img">
-                        <span><?= htmlspecialchars(substr($fp['name'], 0, 20)) ?>...</span>
-                            <strong><?= formatPrice($fp['discount_price'] ?? $fp['price']) ?></strong>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
+                        <div class="banner-product-card" onclick="window.location='product.php?id=<?= $fp['id'] ?>'">
+                            <img src="<?php echo UPLOAD_URL . $fp['main_image']; ?>" 
+                                alt="<?php echo htmlspecialchars($fp['name']); ?>" 
+                                class="product-img">
+                            <div>
+                                <span><?= htmlspecialchars(substr($fp['name'], 0, 20)) ?>...</span>
+                                <strong><?= formatPrice($fp['discount_price'] ?? $fp['price']) ?></strong>
+                            </div>
+                    </div> <?php endforeach; ?>
                 </div>
             </div>
         </div>

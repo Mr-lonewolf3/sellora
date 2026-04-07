@@ -2,6 +2,14 @@
 require_once(__DIR__ . '/config/config.php');
 $conn = getDBConnection();
 $categories = getCategories($conn);
+
+$trending_query = "SELECT p.id, p.name, p.price, p.discount_price, p.main_image, p.category_id 
+                  FROM products p 
+                  WHERE p.is_active = 1 
+                  ORDER BY p.views DESC LIMIT 8";
+$trending_result = $conn->query($trending_query);
+$trending_products = $trending_result->fetch_all(MYSQLI_ASSOC);
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -303,102 +311,45 @@ $categories = getCategories($conn);
     </div>
     <div class="qs-products-row" id="productsRow">
       <!-- Product Card Template (replace with PHP loop from your products table) -->
-      <a href="client/product.php?id=1" class="qs-product-card">
-        <div class="qs-product-badge sale">-29%</div>
-        <div class="qs-product-img">
-          <img src="client/images/product-laptop.png"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               alt="Laptop" />
-          <div class="qs-product-img-ph"><i class="fas fa-laptop"></i></div>
-        </div>
-        <div class="qs-product-info">
-          <p class="qs-product-name">MacBook Air M2</p>
-          <div class="qs-product-stars">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            sneakers<i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
-          </div>
-          <div class="qs-product-price">
-            <strong>KSh 89,000</strong>
-            <del>KSh 124,000</del>
-          </div>
-        </div>
-      </a>
-      <a href="client/product.php?id=2" class="qs-product-card">
-        <div class="qs-product-badge hot">HOT</div>
-        <div class="qs-product-img">
-          <img src="client/images/product-phone.png"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               alt="Phone" />
-          <div class="qs-product-img-ph"><i class="fas fa-mobile-alt"></i></div>
-        </div>
-        <div class="qs-product-info">
-          <p class="qs-product-name">Samsung Galaxy S24</p>
-          <div class="qs-product-stars">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <div class="qs-product-price">
-            <strong>KSh 58,000</strong>
-            <del>KSh 70,000</del>
-          </div>
-        </div>
-      </a>
-      <a href="client/product.php?id=3" class="qs-product-card">
-        <div class="qs-product-img">
-          <img src="client/images/product-watch.png"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               alt="Watch" />
-          <div class="qs-product-img-ph"><i class="fas fa-clock"></i></div>
-        </div>
-        <div class="qs-product-info">
-          <p class="qs-product-name">Apple Watch Series 9</p>
-          <div class="qs-product-stars">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            <i class="fas fa-star"></i><i class="far fa-star"></i>
-          </div>
-          <div class="qs-product-price">
-            <strong>KSh 42,000</strong>
-          </div>
-        </div>
-      </a>
-      <a href="client/product.php?id=4" class="qs-product-card">
-        <div class="qs-product-badge sale">-46%</div>
-        <div class="qs-product-img">
-          <img src="client/images/product-headphones.png"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               alt="Headphones" />
-          <div class="qs-product-img-ph"><i class="fas fa-headphones"></i></div>
-        </div>
-        <div class="qs-product-info">
-          <p class="qs-product-name">Sony WH-1000XM5</p>
-          <div class="qs-product-stars">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            <i class="fas fa-star"></i><i class="fas fa-star"></i>
-          </div>
-          <div class="qs-product-price">
-            <strong>KSh 28,000</strong>
-            <del>KSh 52,000</del>
-          </div>
-        </div>
-      </a>
-      <a href="client/product.php?id=5" class="qs-product-card">
-        <div class="qs-product-img">
-          <img src="client/images/product-camera.png"
-               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-               alt="Camera" />
-          <div class="qs-product-img-ph"><i class="fas fa-camera"></i></div>
-        </div>
-        <div class="qs-product-info">
-          <p class="qs-product-name">Canon EOS R50</p>
-          <div class="qs-product-stars">
-            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-            <i class="fas fa-star"></i><i class="far fa-star"></i>
-          </div>
-          <div class="qs-product-price">
-            <strong>KSh 75,000</strong>
-          </div>
-        </div>
-      </a>
+      <div class="qs-products-row" id="productsRow">
+          <?php if (!empty($trending_products)): ?>
+              <?php foreach ($trending_products as $tp): 
+                  $tp_price = $tp['discount_price'] ?? $tp['price'];
+                  $has_tp_discount = !empty($tp['discount_price']) && $tp['discount_price'] < $tp['price'];
+                  
+                  // FIX: If UPLOAD_URL is a full http:// link, use it directly.
+                  // If it is a relative path like 'uploads/products/', use 'client/' . UPLOAD_URL
+                  $base_url = (strpos(UPLOAD_URL, 'http') === 0) ? UPLOAD_URL : 'client/' . UPLOAD_URL;
+                  $tp_img = !empty($tp['main_image']) ? $base_url . $tp['main_image'] : 'https://via.placeholder.com/300';
+              ?>
+                  <a href="client/product.php?id=<?= $tp['id'] ?>" class="qs-product-card">
+                      <?php if ($has_tp_discount): ?>
+                          <div class="qs-product-badge sale">SALE</div>
+                      <?php endif; ?>
+                      
+                      <div class="qs-product-img">
+                          <img src="<?= $tp_img ?>" alt="<?= htmlspecialchars($tp['name']) ?>" 
+                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                          <div class="qs-product-img-ph"><i class="fas fa-shopping-bag"></i></div>
+                      </div>
+
+                      <div class="qs-product-info">
+                          <p class="qs-product-name"><?= htmlspecialchars(substr($tp['name'], 0, 25)) ?>...</p>
+                          <div class="qs-product-stars">
+                              <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                          </div>
+                          <div class="qs-product-price">
+                              <strong>KSh <?= number_format($tp_price) ?></strong>
+                              <?php if ($has_tp_discount): ?>
+                                  <del>KSh <?= number_format($tp['price']) ?></del>
+                              <?php endif; ?>
+                          </div>
+                      </div>
+                  </a>
+              <?php endforeach; ?>
+          <?php else: ?>
+              <p>No products trending yet. Keep shopping!</p>
+          <?php endif; ?>
     </div>
     <div class="qs-view-all-wrap">
       <a href="client/home.php" class="qs-btn-outline-red">View All Products <i class="fas fa-arrow-right"></i></a>

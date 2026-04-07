@@ -243,9 +243,11 @@ if (file_exists($main_file) && is_file($main_file)) {
           $rp_price = $rp['discount_price'] ?? $rp['price'];
           $rp_has_disc = !empty($rp['discount_price']) && $rp['discount_price'] < $rp['price'];
           $rp_disc_pct = $rp_has_disc ? round((1 - $rp['discount_price'] / $rp['price']) * 100) : 0;
-          $rp_img = file_exists('../uploads/products/' . $rp['main_image'])
-            ? '../uploads/products/' . $rp['main_image']
-            : 'https://via.placeholder.com/300x300/f5f5f5/999?text=' . urlencode($rp['name']);
+          // Use UPLOAD_URL for consistency. 
+         // We check if the image name exists in the DB, otherwise use placeholder.
+         $rp_img = !empty($rp['main_image']) 
+              ? UPLOAD_URL . $rp['main_image'] 
+              : 'https://via.placeholder.com/300x300/f5f5f5/999?text=' . urlencode($rp['name']);
         ?>
         <div class="product-card" onclick="window.location='product.php?id=<?= $rp['id'] ?>'">
           <div class="product-card-img">
