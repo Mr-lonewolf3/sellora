@@ -208,8 +208,7 @@ document.getElementById('addProductForm').addEventListener('submit', async funct
 
   const formData = new FormData(this);
   try {
-    const res = await fetch('../api/products.php', { method: 'POST', body: formData });
-    const data = await res.json();
+    const res = await fetch('../api/products.php?action=add', { method: 'POST', body: formData });    const data = await res.json();
     const alertBox = document.getElementById('alertBox');
 
     if (data.success) {

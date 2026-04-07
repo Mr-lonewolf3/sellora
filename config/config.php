@@ -16,8 +16,8 @@ define('SITE_URL', 'http://localhost:8080');
 define('SITE_DESCRIPTION', 'Kenya\'s Premier Online Marketplace');
 define('CURRENCY', 'KES');
 if (!defined('CURRENCY_SYMBOL')) {define('CURRENCY_SYMBOL', 'KSh');}
-define('UPLOAD_DIR', __DIR__ . '/../uploads/products/');
-define('UPLOAD_URL', SITE_URL . '/uploads/products/');
+define('UPLOAD_DIR', dirname(__DIR__) . '/client/uploads/products/');
+define('UPLOAD_URL', SITE_URL . '/client/uploads/products/');
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
 define('ALLOWED_EXTENSIONS', ['jpg', 'jpeg', 'png', 'webp', 'gif']);
 

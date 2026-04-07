@@ -1,8 +1,10 @@
 <?php
 define('INCLUDED', true);
 require_once __DIR__ . '/../config/config.php';
-// require_once __DIR__ . '/../config/helpers.php';
+require_once __DIR__ . '/../config/helpers.php';
+require_once __DIR__ . '/../config/database.php';
 $conn = getDBConnection();
+$pdo = getPDOConnection();
 
 $category = sanitize($_GET['category'] ?? '');
 $search_query = sanitize($_GET['q'] ?? '');
@@ -95,261 +97,225 @@ $featured = $featured_stmt->fetch_all(MYSQLI_ASSOC);
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $active_category ? htmlspecialchars($active_category['name']) . ' - ' : '' ?><?= !empty($search_query) ? "\"$search_query\" - " : '' ?>Sellora</title>
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/home.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $active_category ? htmlspecialchars($active_category['name']) . ' - ' : '' ?><?= !empty($search_query) ? "\"$search_query\" - " : '' ?>Sellora</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <?php include '../includes/navbar.php'; ?>
 
 <main class="main-content">
-  <div class="container">
+<div class="container">
 
     <?php if (empty($category) && empty($search_query)): ?>
-    <!-- ============================================================
-         HERO BANNER (Homepage)
-         ============================================================ -->
     <div class="home-banner">
-      <div class="home-banner-content">
-        <div class="home-banner-text">
-          <span class="banner-tag">🔥 Flash Sale</span>
-          <h1>Discover Amazing Deals<br>Across Kenya</h1>
-          <p>Shop from thousands of products across all categories. Fast delivery, secure payments.</p>
-          <div class="banner-search">
-            <input type="text" id="bannerSearch" placeholder="What are you looking for?">
-            <button onclick="doBannerSearch()"><i class="fas fa-search"></i> Search</button>
-          </div>
+        <div class="home-banner-content">
+            <div class="home-banner-text">
+                <span class="banner-tag">🔥 Flash Sale</span>
+                <h1>Discover Amazing Deals<br>Across Kenya</h1>
+                <p>Shop from thousands of products across all categories. Fast delivery, secure payments.</p>
+                <div class="banner-search">
+                    <input type="text" id="bannerSearch" placeholder="What are you looking for?">
+                    <button onclick="doBannerSearch()"><i class="fas fa-search"></i> Search</button>
+                </div>
+            </div>
+            <div class="home-banner-visual">
+                <div class="banner-cards">
+                    <?php foreach (array_slice($featured, 0, 3) as $fp): ?>
+                    <div class="banner-product-card" onclick="window.location='product.php?id=<?= $fp['id'] ?>'">
+                        <img src="<?php echo UPLOAD_URL . $product['main_image']; ?>" 
+                            alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                            class="product-img">
+                        <span><?= htmlspecialchars(substr($fp['name'], 0, 20)) ?>...</span>
+                            <strong><?= formatPrice($fp['discount_price'] ?? $fp['price']) ?></strong>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
         </div>
-        <div class="home-banner-visual">
-          <div class="banner-cards">
-            <?php foreach (array_slice($featured, 0, 3) as $fp): ?>
-              <div class="banner-product-card" onclick="window.location='product.php?id=<?= $fp['id'] ?>'">
-                  <?php 
-                    // Manual Path Logic
-                    $fp_path = '../uploads/products/' . trim($fp['main_image']);
-                    $fp_img = (file_exists($fp_path) && is_file($fp_path)) 
-                              ? $fp_path 
-                              : 'https://via.placeholder.com/300x300/f5f5f5/999?text=' . urlencode($fp['name']);
-                  ?>
-                  <img src="<?= $fp_img ?>" alt="<?= htmlspecialchars($fp['name']) ?>">              
-                  <div>
-                    <span><?= htmlspecialchars(substr($fp['name'], 0, 20)) ?>...</span>
-                    <strong><?= formatPrice($fp['discount_price'] ?? $fp['price']) ?></strong>
-                  </div>
-              </div>
-              <?php endforeach; ?>
-          </div>
-        </div>
-      </div>
     </div>
 
-    <!-- CATEGORIES SECTION -->
     <section class="home-section">
-      <div class="section-header">
-        <h2 class="section-title">Shop by Category</h2>
-      </div>
-      <div class="categories-grid">
-        <?php foreach ($categories as $cat): ?>
-        <a href="home.php?category=<?= $cat['slug'] ?>" class="category-card">
-          <i class="<?= $cat['icon'] ?>"></i>
-          <span><?= htmlspecialchars($cat['name']) ?></span>
-        </a>
-        <?php endforeach; ?>
-      </div>
+        <div class="section-header">
+            <h2 class="section-title">Shop by Category</h2>
+        </div>
+        <div class="categories-grid">
+            <?php foreach ($categories as $cat): ?>
+            <a href="home.php?category=<?= $cat['slug'] ?>" class="category-card">
+                <i class="<?= $cat['icon'] ?>"></i>
+                <span><?= htmlspecialchars($cat['name']) ?></span>
+            </a>
+            <?php endforeach; ?>
+        </div>
     </section>
     <?php endif; ?>
 
-    <!-- ============================================================
-         PRODUCTS SECTION
-         ============================================================ -->
     <div class="products-layout">
-      <!-- SIDEBAR FILTERS -->
-      <aside class="filter-sidebar">
-        <div class="filter-card">
-          <h3 class="filter-title"><i class="fas fa-sliders-h"></i> Filters</h3>
+        <aside class="filter-sidebar">
+            <div class="filter-card">
+                <h3 class="filter-title"><i class="fas fa-sliders-h"></i> Filters</h3>
+                <div class="filter-section">
+                    <h4>Categories</h4>
+                    <ul class="filter-list">
+                        <li>
+                            <a href="home.php<?= !empty($search_query) ? '?q=' . urlencode($search_query) : '' ?>" class="<?= empty($category) ? 'active' : '' ?>">
+                                All Categories
+                            </a>
+                        </li>
+                        <?php foreach ($categories as $cat): ?>
+                        <li>
+                            <a href="home.php?category=<?= $cat['slug'] ?><?= !empty($search_query) ? '&q=' . urlencode($search_query) : '' ?>"
+                               class="<?= $category === $cat['slug'] ? 'active' : '' ?>">
+                                <i class="<?= $cat['icon'] ?>"></i> <?= htmlspecialchars($cat['name']) ?>
+                            </a>
+                        </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
 
-          <div class="filter-section">
-            <h4>Categories</h4>
-            <ul class="filter-list">
-              <li>
-                <a href="home.php<?= !empty($search_query) ? '?q=' . urlencode($search_query) : '' ?>" class="<?= empty($category) ? 'active' : '' ?>">
-                  All Categories
-                </a>
-              </li>
-              <?php foreach ($categories as $cat): ?>
-              <li>
-                <a href="home.php?category=<?= $cat['slug'] ?><?= !empty($search_query) ? '&q=' . urlencode($search_query) : '' ?>"
-                   class="<?= $category === $cat['slug'] ? 'active' : '' ?>">
-                  <i class="<?= $cat['icon'] ?>"></i> <?= htmlspecialchars($cat['name']) ?>
-                </a>
-              </li>
-              <?php endforeach; ?>
-            </ul>
-          </div>
+                <div class="filter-section">
+                    <h4>Price Range (KSh)</h4>
+                    <div class="price-range">
+                        <input type="number" id="minPrice" placeholder="Min" value="<?= $min_price > 0 ? $min_price : '' ?>" class="form-control">
+                        <span>—</span>
+                        <input type="number" id="maxPrice" placeholder="Max" value="<?= $max_price > 0 ? $max_price : '' ?>" class="form-control">
+                    </div>
+                    <button class="btn btn-primary btn-sm btn-block" onclick="applyPriceFilter()" style="margin-top:10px;">Apply</button>
+                </div>
 
-          <div class="filter-section">
-            <h4>Price Range (KSh)</h4>
-            <div class="price-range">
-              <input type="number" id="minPrice" placeholder="Min" value="<?= $min_price > 0 ? $min_price : '' ?>" class="form-control">
-              <span>—</span>
-              <input type="number" id="maxPrice" placeholder="Max" value="<?= $max_price > 0 ? $max_price : '' ?>" class="form-control">
+                <div class="filter-section">
+                    <h4>Sort By</h4>
+                    <select class="form-control form-select" onchange="applySortFilter(this.value)">
+                        <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest First</option>
+                        <option value="popular" <?= $sort === 'popular' ? 'selected' : '' ?>>Most Popular</option>
+                        <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Price: Low to High</option>
+                        <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
+                    </select>
+                </div>
             </div>
-            <button class="btn btn-primary btn-sm btn-block" onclick="applyPriceFilter()" style="margin-top:10px;">Apply</button>
-          </div>
+        </aside>
 
-          <div class="filter-section">
-            <h4>Sort By</h4>
-            <select class="form-control form-select" onchange="applySortFilter(this.value)">
-              <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest First</option>
-              <option value="popular" <?= $sort === 'popular' ? 'selected' : '' ?>>Most Popular</option>
-              <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Price: Low to High</option>
-              <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
-            </select>
-          </div>
-        </div>
-      </aside>
-
-      <!-- MAIN PRODUCTS AREA -->
-  <div class="products-main">
-        <div class="results-header">
-          <div class="results-info">
-            <?php if (!empty($search_query)): ?>
-              <h2>Results for "<strong><?= htmlspecialchars($search_query) ?></strong>"</h2>
-            <?php elseif ($active_category): ?>
-              <h2><i class="<?= $active_category['icon'] ?>"></i> <?= htmlspecialchars($active_category['name']) ?></h2>
-            <?php else: ?>
-              <h2>All Products</h2>
-            <?php endif; ?>
-            <span><?= number_format($total_products) ?> products found</span>
-          </div>
-          <div class="results-sort-mobile">
-            <select class="form-control form-select" onchange="applySortFilter(this.value)">
-              <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest</option>
-              <option value="popular" <?= $sort === 'popular' ? 'selected' : '' ?>>Popular</option>
-              <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Price ↑</option>
-              <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Price ↓</option>
-            </select>
-          </div>
-        </div>
-
-        <?php if (empty($products)): ?>
-          <div class="empty-state">
-            <i class="fas fa-search"></i>
-            <h3>No products found</h3>
-            <p>Try adjusting your search or filters</p>
-            <a href="home.php" class="btn btn-primary" style="margin-top:16px;">Browse All Products</a>
-          </div>
-        <?php else: ?>
-          <div class="products-grid">
-            <?php foreach ($products as $product): ?>
-              <?php
-              $effective_price = $product['discount_price'] ?? $product['price'];
-              $has_discount = !empty($product['discount_price']) && $product['discount_price'] < $product['price'];
-              $discount_pct = $has_discount ? round((1 - $product['discount_price'] / $product['price']) * 100) : 0;
-
-              $product_file = '../uploads/products/' . trim($product['main_image']);
-              if (!empty($product['main_image']) && file_exists($product_file) && is_file($product_file)) {
-                  $current_img = $product_file;
-              } else {
-                  $current_img = 'https://via.placeholder.com/300x300/f5f5f5/999?text=' . urlencode($product['name']);
-              }
-              ?>
-
-              <div class="product-card" onclick="window.location='product.php?id=<?= $product['id'] ?>'">
-                <div class="product-card-img">
-                  <img src="<?= $current_img ?>" alt="<?= htmlspecialchars($product['name']) ?>" loading="lazy">
-                  
-                  <?php if ($has_discount): ?>
-                    <span class="product-badge sale">-<?= $discount_pct ?>%</span>
-                  <?php endif; ?>
-
-                  <?php if ($product['stock'] <= 0): ?>
-                    <span class="product-badge" style="background:#666;">Out of Stock</span>
-                  <?php endif; ?>
-                </div>
-
-                <div class="product-card-body">
-                  <div class="product-vendor"><?= htmlspecialchars($product['company_name'] ?? 'Vendor') ?></div>
-                  <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
-
-                  <div class="product-price">
-                    <span class="price-current"><?= formatPrice($effective_price) ?></span>
-                    <?php if ($has_discount): ?>
-                      <span class="price-original"><?= formatPrice($product['price']) ?></span>
+        <div class="products-main">
+            <div class="results-header">
+                <div class="results-info">
+                    <?php if (!empty($search_query)): ?>
+                        <h2>Results for "<strong><?= htmlspecialchars($search_query) ?></strong>"</h2>
+                    <?php elseif ($active_category): ?>
+                        <h2><i class="<?= $active_category['icon'] ?>"></i> <?= htmlspecialchars($active_category['name']) ?></h2>
+                    <?php else: ?>
+                        <h2>All Products</h2>
                     <?php endif; ?>
-                  </div>
+                    <span><?= number_format($total_products) ?> products found</span>
                 </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
-        <?php endif; ?> 
+                <div class="results-sort-mobile">
+                    <select class="form-control form-select" onchange="applySortFilter(this.value)">
+                        <option value="newest" <?= $sort === 'newest' ? 'selected' : '' ?>>Newest</option>
+                        <option value="popular" <?= $sort === 'popular' ? 'selected' : '' ?>>Popular</option>
+                        <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Price ↑</option>
+                        <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Price ↓</option>
+                    </select>
+                </div>
+            </div>
 
-      </div> </div> ```
+            <?php if (empty($products)): ?>
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>No products found</h3>
+                    <p>Try adjusting your search or filters</p>
+                    <a href="home.php" class="btn btn-primary" style="margin-top:16px;">Browse All Products</a>
+                </div>
+            <?php else: ?>
+                <div class="products-grid">
+                    <?php foreach ($products as $product): ?>
+                    <?php
+                        $effective_price = $product['discount_price'] ?? $product['price'];
+                        $has_discount = !empty($product['discount_price']) && $product['discount_price'] < $product['price'];
+                        $discount_pct = $has_discount ? round((1 - $product['discount_price'] / $product['price']) * 100) : 0;
+                    ?>
+                    <div class="product-card" onclick="window.location='product.php?id=<?= $product['id'] ?>'">
+                        <div class="product-card-img">
+                           <img src="<?php echo UPLOAD_URL . $product['main_image']; ?>" 
+                                alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                                class="product-img">
+                            <?php if ($has_discount): ?>
+                                <span class="product-badge sale">-<?= $discount_pct ?>%</span>
+                            <?php endif; ?>
+                            <?php if ($product['stock'] <= 0): ?>
+                                <span class="product-badge" style="background:#666;">Out of Stock</span>
+                            <?php endif; ?>
+                        </div>
+                        <div class="product-card-body">
+                            <div class="product-vendor"><?= htmlspecialchars($product['company_name']) ?></div>
+                            <div class="product-name"><?= htmlspecialchars($product['name']) ?></div>
+                            <div class="product-price">
+                                <span class="price-current"><?= formatPrice($effective_price) ?></span>
+                                <?php if ($has_discount): ?>
+                                    <span class="price-original"><?= formatPrice($product['price']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
 
-<!-- ### What was removed/fixed to stop the error:
-1.  **Dangling If-Statement:** Removed the stray `<?php if ($total_pages > 1): ?>` that appeared right after the `endforeach;`. This was causing the "unexpected end of file" because it didn't have a matching `endif`.
-2.  **Redundant HTML:** Removed the second `product-card-body` block that was sitting outside of the PHP loop. Since it wasn't inside a loop, `$product` was undefined there, which would have caused a separate crash.
-3.  **Correct Nesting:** Ensured that the `endif;` for your `if (empty($products))` logic is properly placed before the pagination section begins.
-
-This should now load perfectly on your local server. -->
-
-        <!-- PAGINATION -->
-        <?php if ($total_pages > 1): ?>
-        <div class="pagination">
-          <?php
-          $base_url = 'home.php?' . http_build_query(array_filter([
-            'category' => $category, 'q' => $search_query, 'sort' => $sort,
-            'min_price' => $min_price ?: null, 'max_price' => $max_price ?: null
-          ]));
-          ?>
-          <?php if ($page > 1): ?>
-          <a href="<?= $base_url ?>&page=<?= $page - 1 ?>" class="page-btn"><i class="fas fa-chevron-left"></i></a>
-          <?php endif; ?>
-          <?php for ($i = max(1, $page-2); $i <= min($total_pages, $page+2); $i++): ?>
-          <a href="<?= $base_url ?>&page=<?= $i ?>" class="page-btn <?= $i === $page ? 'active' : '' ?>"><?= $i ?></a>
-          <?php endfor; ?>
-          <?php if ($page < $total_pages): ?>
-          <a href="<?= $base_url ?>&page=<?= $page + 1 ?>" class="page-btn"><i class="fas fa-chevron-right"></i></a>
-          <?php endif; ?>
+                <?php if ($total_pages > 1): ?>
+                <div class="pagination">
+                    <?php
+                    $base_params = array_filter([
+                        'category' => $category, 'q' => $search_query, 'sort' => $sort,
+                        'min_price' => $min_price ?: null, 'max_price' => $max_price ?: null
+                    ]);
+                    $base_url = 'home.php?' . http_build_query($base_params);
+                    ?>
+                    <?php if ($page > 1): ?>
+                        <a href="<?= $base_url ?>&page=<?= $page - 1 ?>" class="page-btn"><i class="fas fa-chevron-left"></i></a>
+                    <?php endif; ?>
+                    <?php for ($i = max(1, $page-2); $i <= min($total_pages, $page+2); $i++): ?>
+                        <a href="<?= $base_url ?>&page=<?= $i ?>" class="page-btn <?= $i === $page ? 'active' : '' ?>"><?= $i ?></a>
+                    <?php endfor; ?>
+                    <?php if ($page < $total_pages): ?>
+                        <a href="<?= $base_url ?>&page=<?= $page + 1 ?>" class="page-btn"><i class="fas fa-chevron-right"></i></a>
+                    <?php endif; ?>
+                </div>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
-        <?php endif; ?>
-      </div>
     </div>
-
-  </div>
+</div>
 </main>
 
 <?php include '../includes/footer.php'; ?>
 
 <script>
 function doBannerSearch() {
-  const q = document.getElementById('bannerSearch').value.trim();
-  if (q) window.location.href = 'home.php?q=' + encodeURIComponent(q);
+    const q = document.getElementById('bannerSearch').value.trim();
+    if (q) window.location.href = 'home.php?q=' + encodeURIComponent(q);
 }
 
 document.getElementById('bannerSearch')?.addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') doBannerSearch();
+    if (e.key === 'Enter') doBannerSearch();
 });
 
 function applyPriceFilter() {
-  const min = document.getElementById('minPrice').value;
-  const max = document.getElementById('maxPrice').value;
-  const params = new URLSearchParams(window.location.search);
-  if (min) params.set('min_price', min); else params.delete('min_price');
-  if (max) params.set('max_price', max); else params.delete('max_price');
-  params.delete('page');
-  window.location.href = 'home.php?' + params.toString();
+    const min = document.getElementById('minPrice').value;
+    const max = document.getElementById('maxPrice').value;
+    const params = new URLSearchParams(window.location.search);
+    if (min) params.set('min_price', min); else params.delete('min_price');
+    if (max) params.set('max_price', max); else params.delete('max_price');
+    params.delete('page');
+    window.location.href = 'home.php?' + params.toString();
 }
 
 function applySortFilter(sort) {
-  const params = new URLSearchParams(window.location.search);
-  params.set('sort', sort);
-  params.delete('page');
-  window.location.href = 'home.php?' + params.toString();
+    const params = new URLSearchParams(window.location.search);
+    params.set('sort', sort);
+    params.delete('page');
+    window.location.href = 'home.php?' + params.toString();
 }
 </script>
 </body>

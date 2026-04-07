@@ -76,6 +76,9 @@ $conn = getDBConnection();
 <?php include '../includes/footer.php'; ?>
 
 <script>
+// Pass the PHP constant to JavaScript
+const UPLOAD_URL = "<?php echo UPLOAD_URL; ?>";
+
 let cartData = null;
 
 async function loadCart() {
@@ -101,7 +104,7 @@ async function loadCart() {
     let itemsHtml = '';
     data.items.forEach(item => {
       const img = item.main_image
-        ? `../uploads/products/${item.main_image}`
+        ? `${UPLOAD_URL}${item.main_image}`
         : `https://via.placeholder.com/80x80/f5f5f5/999?text=P`;
       itemsHtml += `
         <div class="cart-item" id="cart-item-${item.cart_id}">

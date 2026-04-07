@@ -91,8 +91,7 @@ function addProduct($conn) {
     $slug = generateSlug($name) . '-' . uniqid();
 
     $stmt = $conn->prepare("INSERT INTO products (vendor_id, category_id, name, slug, description, price, discount_price, stock, main_image, images, brand, sku) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("iisssddiisss", $vendor_id, $category_id, $name, $slug, $description, $price, $discount_price, $stock, $main_image, $images_json, $brand, $sku);
-
+    $stmt->bind_param("iisssddissss", $vendor_id, $category_id, $name, $slug, $description, $price, $discount_price, $stock, $main_image, $images_json, $brand, $sku);
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Product added successfully', 'product_id' => $conn->insert_id]);
     } else {

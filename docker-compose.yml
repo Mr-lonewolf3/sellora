@@ -27,7 +27,6 @@ services:
       MYSQL_PASSWORD: sellora_pass
     volumes:
       - sellora_mysql_data:/var/lib/mysql
-      - ./database/sellora.sql:/docker-entrypoint-initdb.d/sellora.sql
     networks:
       - sellora_net
     restart: unless-stopped
@@ -56,7 +55,7 @@ services:
 
 volumes:
   sellora_mysql_data:
-
+  
 networks:
   sellora_net:
     driver: bridge

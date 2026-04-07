@@ -37,13 +37,13 @@ $has_discount = !empty($product['discount_price']) && $product['discount_price']
 $discount_pct = $has_discount ? round((1 - $product['discount_price'] / $product['price']) * 100) : 0;
 // $main_img = getProductImage($product['main_image'], $product['name']);
 
-$main_file = '../uploads/products/' . trim($product['main_image']);
+$main_file = '/client/uploads/products/' . trim($product['main_image']);
 if (file_exists($main_file) && is_file($main_file)) {
     $main_img = $main_file;
 } elseif (!empty($extra_images)) {
     // Use first extra image as fallback
     foreach ($extra_images as $img) {
-        $extra_path = '../uploads/products/' . trim($img);
+        $extra_path = '/client/uploads/products/' . trim($img);
         if (file_exists($extra_path) && is_file($extra_path)) {
             $main_img = $extra_path;
             break;
@@ -84,20 +84,32 @@ if (file_exists($main_file) && is_file($main_file)) {
       <!-- Images -->
       <div class="product-images">
         <div class="main-image-wrap">
-          <img id="mainProductImg" src="<?= $main_img ?>" alt="<?= htmlspecialchars($product['name']) ?>">
+            <img src="<?php echo UPLOAD_URL . $product['main_image']; ?>" 
+                    alt="<?php echo htmlspecialchars($product['name']); ?>" 
+                    id="mainProductImg">
           <?php if ($has_discount): ?>
           <div class="img-badge">-<?= $discount_pct ?>% OFF</div>
           <?php endif; ?>
         </div>
         <?php if (!empty($extra_images)): ?>
         <div class="image-thumbs">
-          <img src="<?= $main_img ?>" class="thumb active" onclick="switchImage(this, '<?= $main_img ?>')">
-          <?php foreach ($extra_images as $img): ?>
-          <?php $img_url = file_exists('../uploads/products/' . $img) ? '../uploads/products/' . $img : ''; ?>
-          <?php if ($img_url): ?>
-          <img src="<?= $img_url ?>" class="thumb" onclick="switchImage(this, '<?= $img_url ?>')">
-          <?php endif; ?>
-          <?php endforeach; ?>
+          <?php 
+            // 1. Decode the JSON string from the database
+            $extras = json_decode($product['images'], true); 
+            
+            // 2. Check if there are actually any extra images
+            if (!empty($extras)): 
+                foreach ($extras as $extra_img): 
+            ?>
+                <div class="thumb">
+                    <img src="<?php echo UPLOAD_URL . $extra_img; ?>" 
+                        onclick="document.getElementById('mainProductImg').src=this.src" 
+                        style="cursor:pointer; width:80px; height:80px; object-fit:cover;">
+                </div>
+            <?php 
+                endforeach; 
+            endif; 
+            ?>
         </div>
         <?php endif; ?>
       </div>

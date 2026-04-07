@@ -207,30 +207,106 @@ VALUES (
 -- ============================================================
 -- SEED DEMO VENDOR
 -- ============================================================
+SET FOREIGN_KEY_CHECKS = 0;
+TRUNCATE TABLE products;
+TRUNCATE TABLE vendors;
+SET FOREIGN_KEY_CHECKS = 1;
+
 INSERT INTO vendors (
+        id,
         company_name,
         email,
         password,
         phone,
         description,
+        is_active,
         is_verified
     )
-VALUES (
-        'TechHub Kenya',
-        'vendor@sellora.com',
-        '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-        '+254712345678',
-        'Your one-stop tech shop in Kenya',
-        1
-    ),
-    (
-        'Fashion Palace',
-        'fashion@sellora.com',
-        '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-        '+254798765432',
-        'Latest fashion trends at affordable prices',
-        1
-    );
+VALUES -- Category: Electronics & Tech
+(
+ 1,
+ 'TechHub Kenya',
+ 'sales@techhub.co.ke', 
+ '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 
+ '0711222333', 
+ 'Premium laptops and accessories in Nairobi.',
+  1, 
+  1
+ ),
+(
+    2,
+    'Nexus Electronics',
+    'info@nexus.ke', 
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+     '0722333444',
+      'Authorized dealer for smartphones and smart home devices.', 
+      1, 
+      1
+      ),
+
+-- Category: Fashion & Apparel
+(
+    3,
+    'Fashion Palace', 
+    'hello@fashionpalace.com', 
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+    '0733444555',
+    'Trendy outfits and designer footwear.',
+      1, 
+      1
+      ),
+(
+    4,
+    'Maji Fashion House', 
+    'design@maji.co.ke',
+     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 
+     '0744555666', 
+     'Authentic African wear and custom tailoring.',
+      1,
+       1
+      ),
+
+-- Category: Home & Living
+(
+    5,
+    'Decor Central', 
+    'support@decorcentral.ke',
+     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+      '0755666777',
+       'Modern furniture and minimalist home decor.',
+        1,
+         1
+         ),
+(
+    6,
+    'Kitchen Masters', 
+    'orders@kitchenmasters.com',
+     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+      '0766777888', 'High-quality kitchenware and appliances.',
+       1, 
+       1
+       ),
+
+-- Category: Beauty & Personal Care
+(
+ 7,
+ 'Glow Cosmetics',
+ 'admin@glow.ke', 
+ '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 
+ '0777888999', 
+ 'Organic skincare and professional makeup kits.', 
+ 1,
+  1
+  ),
+(
+    8,
+    'The Scent Shop', 
+    'scents@shop.com', 
+    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 
+    '0788999000', 
+    'Original designer perfumes and fragrances.',
+     1, 
+     1);
 -- ============================================================
 -- SEED DEMO USER (password: password)
 -- ============================================================
@@ -241,3 +317,10 @@ VALUES (
         '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
         '+254700000000'
     );
+
+INSERT INTO products (vendor_id, category_id, name, slug, price, main_image)
+VALUES
+(1, 1, 'Electronics Item', 'electronics-item', 45000, 'product_69b9897555108.jpg'),
+(1, 1, 'Tech Gadget', 'tech-gadget', 12000, 'product_69b98a7b62446.jpg'),
+(3, 2, 'Summer Dress', 'summer-dress', 3500, 'product_69b55754b52e1.jpg'),
+(3, 2, 'Casual Sneakers', 'casual-sneakers', 5800, 'product_69b669749dd71.jpg');
