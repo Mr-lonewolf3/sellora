@@ -116,7 +116,7 @@ $featured = $featured_stmt->fetch_all(MYSQLI_ASSOC);
         <div class="home-banner-content">
             <div class="home-banner-text">
                 <span class="banner-tag">🔥 Flash Sale</span>
-                <h1>Discover Amazing Deals<br>Across Kenya</h1>
+                <h1>Discover Amazing Deals<br>Across County</h1>
                 <p>Shop from thousands of products across all categories. Fast delivery, secure payments.</p>
                 <div class="banner-search">
                     <input type="text" id="bannerSearch" placeholder="What are you looking for?">
