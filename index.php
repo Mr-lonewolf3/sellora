@@ -62,7 +62,7 @@ $trending_products = $trending_result->fetch_all(MYSQLI_ASSOC);
     <div class="qs-hero-text">
       <p class="qs-hero-sub">Kenya's #1 Marketplace — <span>50,000+ Products</span></p>
       <h1>Shop Smart.<br><em>Sell More.</em><br>Grow Together.</h1>
-      <p class="qs-hero-desc">Discover thousands of products from verified vendors across Kenya. Electronics, fashion, beauty, and more — delivered to your door.</p>
+      <p class="qs-hero-desc">Discover thousands of products from verified vendors across County. Electronics, fashion, beauty, and more — delivered to your door.</p>
       <div class="qs-hero-price">
         <span>From</span> <strong>KSh 199</strong>
         <small>or enjoy M-Pesa easy payment</small>
